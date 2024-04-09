@@ -24,7 +24,6 @@ const FetchPriceCommand = () => {
             setPrice(data.price);
             setError('');
         } catch (error) {
-            console.error('Error fetching price:', error);
             setPrice('');
             setError('Error fetching price. Please try again.');
         }

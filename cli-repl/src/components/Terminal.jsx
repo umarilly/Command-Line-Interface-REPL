@@ -3,6 +3,7 @@ import '../styles/terminal.css';
 import HelpCommand from './HelpCommand';
 import AboutCommand from './AboutCommand';
 import FetchPriceCommand from './FetchPriceCommand';
+import UploadCommand from './UploadCommand';
 
 const Terminal = () => {
 
@@ -34,14 +35,17 @@ const Terminal = () => {
             case 'about':
                 newOutput = <AboutCommand />;
                 break;
+            case 'upload':
+                newOutput = <UploadCommand />;
+                break;
+            case 'fetch-price':
+                newOutput = <FetchPriceCommand />;
+                    break;
             case 'clear':
                 setCommandHistory('');
                 setInputValue('');
                 setClearIntro(true);
                 break;
-            case 'fetch-price':
-                newOutput = <FetchPriceCommand />;
-                    break;
             case '':
                 break;
             default:
@@ -88,9 +92,7 @@ const Terminal = () => {
                             </div>
                         </div>
                     </form>
-
                 </div>
-
             </div>
         </>
     );

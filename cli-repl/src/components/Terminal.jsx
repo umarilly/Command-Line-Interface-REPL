@@ -1,15 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import '../styles/terminal.css';
+import HelpCommand from './HelpCommand';
+import AboutCommand from './AboutCommand';
 
 const Terminal = () => {
 
     const [inputValue, setInputValue] = useState('');
     const [commandHistory, setCommandHistory] = useState([]);
     const inputRef = useRef(null);
+    const [clearIntro, setClearIntro] = useState(false);
 
     useEffect(() => {
-        inputRef.current.focus();
-    }, []);
+        if (inputRef.current) {
+            inputRef.current.focus();
+            inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    }, [inputValue]);
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -22,23 +28,28 @@ const Terminal = () => {
         let newOutput = '';
         switch (command) {
             case 'help':
-                newOutput = 'List of available commands: \n help - Display this help message \n about - Display information about this REPL';
+                newOutput = <HelpCommand />;
                 break;
             case 'about':
-                newOutput = 'This is a simple CLI REPL created using React.';
+                newOutput = <AboutCommand />;
                 break;
             case 'clear':
                 setCommandHistory('');
                 setInputValue('');
+                setClearIntro(true);
                 break;
             case '':
-                    break;
+                break;
             default:
                 newOutput = `Command not found: ${command}`;
         }
 
         setCommandHistory((prevHistory) => [...prevHistory, { command, output: newOutput }]);
         setInputValue('');
+
+        if (command === 'clear' ||command === 'Clear' ) {
+            setCommandHistory([]);
+        }
     };
 
     return (
@@ -46,12 +57,17 @@ const Terminal = () => {
             <div className='cli'>
 
                 <div className="terminal">
-                    <h1> Welcome to Command Line Interface - REPL </h1>
+
+                    {clearIntro ? null : (
+                        <div>
+                            <h1> Welcome to Command Line Interface - REPL </h1>
+                        </div>
+                    )}
                     {commandHistory.map(({ command, output }, index) => (
                         <div key={index}>
                             <span>{'> '}</span>
                             <span>{command}</span>
-                            <div style={{ marginLeft : '12px' }} >{output}</div>
+                            <div style={{ marginLeft: '12px' }} >{output}</div>
                         </div>
                     ))}
 
@@ -59,13 +75,13 @@ const Terminal = () => {
                         <div className='input-area'>
                             <div className='input-area-sign'> {'> '}</div>
                             <div className='input-area-box'>
-                            <input
-                                type="text"
-                                value={inputValue}
-                                onChange={handleInputChange}
-                                ref={inputRef}
-                            />
-                        </div>
+                                <input
+                                    type="text"
+                                    value={inputValue}
+                                    onChange={handleInputChange}
+                                    ref={inputRef}
+                                />
+                            </div>
                         </div>
                     </form>
 

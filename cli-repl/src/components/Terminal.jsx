@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '../styles/terminal.css';
 import HelpCommand from './HelpCommand';
 import AboutCommand from './AboutCommand';
+import FetchPriceCommand from './FetchPriceCommand';
 
 const Terminal = () => {
 
@@ -38,6 +39,9 @@ const Terminal = () => {
                 setInputValue('');
                 setClearIntro(true);
                 break;
+            case 'fetch-price':
+                newOutput = <FetchPriceCommand />;
+                    break;
             case '':
                 break;
             default:

@@ -13,7 +13,8 @@ const HelpCommand = () => {
                     <li> - about: Display information about this CLI</li>
                     <li> - fetch-price : Choose the cryptocurrency and then enter it - Fetch the current price of a specified cryptocurrency</li>
                     <li> - upload: Opens the file explorer to allow uploading csv files only.</li>
-                    <li> - draw [file] [columns]: Draws the chart of the specified columns of the file present in the draw-chart directory. </li>
+                    <li> - draw: draw file.csv columns in the input field, Draws the chart of the specified columns of the file present in the draw-chart directory. </li>
+                    <li> - delete: Draws the chart of the specified columns of the file present in the draw-chart directory. </li>
                 </ul>
             </div>
         </>

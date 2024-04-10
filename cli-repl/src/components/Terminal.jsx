@@ -5,6 +5,7 @@ import AboutCommand from './AboutCommand';
 import FetchPriceCommand from './FetchPriceCommand';
 import UploadCommand from './UploadCommand';
 import DrawCommand from './DrawCommand';
+import DeleteCommand from './DeleteCommand';
 
 const Terminal = () => {
 
@@ -44,6 +45,9 @@ const Terminal = () => {
                 break;
             case 'draw':
                 newOutput = <DrawCommand />;
+                break;
+            case 'delete':
+                newOutput = <DeleteCommand />;
                 break;
             case 'clear':
                 setCommandHistory('');

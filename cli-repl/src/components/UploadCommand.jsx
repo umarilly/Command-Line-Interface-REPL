@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 
 const UploadCommand = () => {
+
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
 
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
+        const selectedFile = e.target.files[0];
+        if (selectedFile && selectedFile.name.endsWith('.csv')) {
+            setFile(selectedFile);
+            setMessage('');
+        } else {
+            setFile(null);
+            setMessage('Unsupported file format, please select a .csv file.'); 
+        }
     };
 
     const handleUpload = async () => {
@@ -30,7 +38,6 @@ const UploadCommand = () => {
                 setMessage('Failed to upload file. Please try again.');
             }
         } catch (error) {
-            console.error('Error uploading file:', error);
             setMessage('Failed to upload file. Please try again.');
         }
     };
@@ -38,9 +45,9 @@ const UploadCommand = () => {
     return (
         <div>
             <h3>Upload Command</h3>
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload}>Upload</button>
-            {message && <div>{message}</div>}
+            <input type="file" accept=".csv" onChange={handleFileChange} /> <br />
+            <button className='upload-btn' onClick={handleUpload}>Upload</button>
+            {message && <div className='upload-message' >{message}</div>}
         </div>
     );
 };

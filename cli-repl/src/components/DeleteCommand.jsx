@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const DeleteCommand = () => {
 
+    const [inputValue, setInputValue] = useState('');
     const [fileName, setFileName] = useState('');
     const [message, setMessage] = useState('');
 
@@ -16,10 +17,23 @@ const DeleteCommand = () => {
     });
 
     const handleInputChange = (e) => {
-        setFileName(e.target.value);
+        setInputValue(e.target.value);
     };
 
     const handleDelete = async () => {
+
+        const inputParts = inputValue.trim().split(' ');
+        if (inputParts.length < 2 || inputParts[0] !== 'delete') {
+            setMessage('Invalid input format. Please use "delete [file.csv]"');
+            return;
+        }
+
+        const deleteCommand = inputParts[0];
+        console.log(deleteCommand)
+        const fileName = inputParts[1];
+        console.log(fileName)
+
+
         try {
             const response = await fetch(`http://localhost:5000/api/checkFile/${fileName}`);
             const data = await response.json();
@@ -51,7 +65,7 @@ const DeleteCommand = () => {
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-            if (fileName.trim() === '') {
+            if (inputValue.trim() === '') {
                 setMessage('Please enter file name first');
             } else {
                 handleDelete();
@@ -68,11 +82,11 @@ const DeleteCommand = () => {
                 <div className='input-area-box'>
                     <input
                         type="text"
-                        value={fileName}
+                        value={inputValue}
                         ref={inputRef}
                         onChange={handleInputChange}
                         onKeyPress={handleKeyPress}
-                        placeholder="Enter the name of file"
+                        placeholder="Enter command - delete [file.csv]"
                     />
                 </div>
             </div>

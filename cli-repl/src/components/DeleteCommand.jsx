@@ -49,15 +49,15 @@ const DeleteCommand = () => {
     };
 
 
-const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-        if (fileName.trim() === '') {
-            setMessage('Please enter file name first');
-        } else {
-            handleDelete();
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            if (fileName.trim() === '') {
+                setMessage('Please enter file name first');
+            } else {
+                handleDelete();
+            }
         }
-    }
-};
+    };
 
 
     return (

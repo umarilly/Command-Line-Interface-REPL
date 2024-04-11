@@ -1,9 +1,9 @@
 
-import React, { useState , useEffect , useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 const DrawCommand = () => {
-    
+
     const [inputValue, setInputValue] = useState('');
     const [chartData, setChartData] = useState([]);
     const [columns, setColumns] = useState([]);
@@ -20,7 +20,6 @@ const DrawCommand = () => {
             inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     }, [inputValue]);
-
     const handleDraw = async () => {
         const inputParts = inputValue.trim().split(' ');
         if (inputParts.length < 3 || inputParts[0] !== 'draw') {
@@ -32,6 +31,30 @@ const DrawCommand = () => {
         setColumns(cols);
 
         try {
+
+            const fileResponse = await fetch(`http://localhost:5000/api/checkFile/${fileName}`);
+            const fileData = await fileResponse.json();
+            if (!fileData.exists) {
+                alert(`File '${fileName}' not found`);
+                return;
+            }
+            else {
+                const columnResponse = await fetch(`http://localhost:5000/api/checkColumns/${fileName}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ columns: cols }),
+                });
+
+                const columnData = await columnResponse.json();
+                const missingColumns = columnData.missingColumns;
+                if (missingColumns.length > 0) {
+                    alert(`Columns [${missingColumns.join(', ')}] not found in file '${fileName}'`);
+                    return;
+                }
+            }
+
             const response = await fetch('http://localhost:5000/api/draw', {
                 method: 'POST',
                 headers: {
@@ -39,10 +62,9 @@ const DrawCommand = () => {
                 },
                 body: JSON.stringify({ file: fileName, columns: cols }),
             });
-            
+
             if (response.ok) {
                 const data = await response.json();
-                console.log(data)
                 setChartData(data.chart_data);
                 console.log('Data Fetched Successfully');
             } else {
@@ -53,13 +75,30 @@ const DrawCommand = () => {
         }
     };
 
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            handleDraw();
+        }
+    };
+
     return (
         <div>
             <h3>Draw Command</h3>
-            <input type="text" value={inputValue} onChange={handleInputChange} ref={inputRef} placeholder="Enter command (e.g., draw file.csv column_name1 column_name2 ...)" />
-            <button onClick={handleDraw}>Draw Chart</button>
+            <div className='input-area'>
+                <div className='input-area-sign'> {'> '}</div>
+                <div className='input-area-box'>
+                    <input
+                        type="text"
+                        value={inputValue}
+                        onChange={handleInputChange}
+                        ref={inputRef}
+                        onKeyPress={handleKeyPress}
+                        placeholder="Enter command - draw file-name.csv column-name-1 column-name-2 ... )" />
+                </div>
+            </div>
+            
             {chartData.length > 0 && (
-                <div style={{ width: '100%', height: 400 }}>
+                <div className='linechart-div'>
                     <LineChart
                         width={600}
                         height={400}

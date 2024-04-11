@@ -105,6 +105,16 @@ td {
     margin-left: 5px;
 }
 
+/* For Draw */ 
+.linechart-div {
+    width: 100%;
+    height: 400px;
+    padding-top: 20px ;
+    padding-right: 80px ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 /* For Buttons - Tag */
 

@@ -49,7 +49,23 @@ def check_file(file_name):
         return jsonify({'exists': True}), 200
     else:
         return jsonify({'exists': False}), 200
+    
 
+@app.route('/api/checkColumns/<file_name>', methods=['POST'])
+def check_columns(file_name):
+    data = request.json
+    if 'columns' not in data:
+        return jsonify({'error': 'Columns not provided'}), 400
+
+    file_path = os.path.join('draw-chart', file_name)
+    if not os.path.exists(file_path):
+        return jsonify({'error': 'File not found'}), 404
+
+    df = pd.read_csv(file_path)
+    existing_columns = df.columns.tolist()
+    missing_columns = [col for col in data['columns'] if col not in existing_columns]
+
+    return jsonify({'missingColumns': missing_columns}), 200
 
 @app.route('/api/delete', methods=['POST'])
 def delete_file():

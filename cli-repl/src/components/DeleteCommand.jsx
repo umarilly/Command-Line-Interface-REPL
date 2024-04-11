@@ -29,10 +29,7 @@ const DeleteCommand = () => {
         }
 
         const deleteCommand = inputParts[0];
-        console.log(deleteCommand)
         const fileName = inputParts[1];
-        console.log(fileName)
-
 
         try {
             const response = await fetch(`http://localhost:5000/api/checkFile/${fileName}`);

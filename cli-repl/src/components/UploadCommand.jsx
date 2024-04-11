@@ -43,7 +43,7 @@ const UploadCommand = () => {
                 setMessage('Failed to upload file. Please try again.');
             }
         } catch (error) {
-            setMessage('Failed to upload file. Please try again.');
+            setMessage('Failed to upload file. Please try again and check error.');
         }
     };
 

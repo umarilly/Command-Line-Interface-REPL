@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import os
 import pandas as pd
+from pathlib import Path
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -9,12 +10,17 @@ CORS(app)
 
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
+    
     if 'file' not in request.files:
         return jsonify({'error': 'No file part'}), 400
 
     file = request.files['file']
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
+    
+    upload_dir = 'draw-chart'
+    if not os.path.exists(upload_dir):
+        os.makedirs(upload_dir)
 
     file.save(os.path.join('draw-chart', file.filename))
 

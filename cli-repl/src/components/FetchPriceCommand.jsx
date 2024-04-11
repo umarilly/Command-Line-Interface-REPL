@@ -31,9 +31,7 @@ const FetchPriceCommand = () => {
             return;
         }
         const fetchCommand = inputParts[0];
-        console.log(fetchCommand);
         const pairValue = inputParts.slice(1);
-        console.log(pairValue)
         setPair(pairValue);
 
         try {
@@ -43,7 +41,7 @@ const FetchPriceCommand = () => {
             setError('');
         } catch (error) {
             setPrice('');
-            setError('Error fetching price. Please try againn.');
+            setError('Error fetching price. Please try again.');
         }
     };
 
@@ -75,7 +73,7 @@ const FetchPriceCommand = () => {
                             </div>
                         </div>
                     </form>
-                    {error ? <div>{error}</div> : <div>{price && `The current price of ${pair} is ${price}.`}</div>}
+                    {error ? <div>{error}</div> : <div style={{ marginLeft : '12px' }} >{price && `The current price of ${pair} is ${price}.`}</div>}
                 </div>
             </div>
         </>

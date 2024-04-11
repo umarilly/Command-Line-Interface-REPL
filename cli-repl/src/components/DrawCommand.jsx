@@ -7,6 +7,8 @@ const DrawCommand = () => {
     const [inputValue, setInputValue] = useState('');
     const [chartData, setChartData] = useState([]);
     const [columns, setColumns] = useState([]);
+    const [successMessage, SetSuccessMessage] = useState('');
+    const [message, setMessage] = useState('');
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -20,12 +22,14 @@ const DrawCommand = () => {
             inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
     }, [inputValue]);
+
     const handleDraw = async () => {
         const inputParts = inputValue.trim().split(' ');
         if (inputParts.length < 3 || inputParts[0] !== 'draw') {
-            alert('Invalid input format. Please use "draw [file.csv] [column_name1] [column_name2] ..."');
+            setMessage('Invalid input format. Please use "draw [file.csv] [column_name1] [column_name2] ..."');
             return;
         }
+        
         const fileName = inputParts[1];
         const cols = inputParts.slice(2);
         setColumns(cols);
@@ -35,7 +39,7 @@ const DrawCommand = () => {
             const fileResponse = await fetch(`http://localhost:5000/api/checkFile/${fileName}`);
             const fileData = await fileResponse.json();
             if (!fileData.exists) {
-                alert(`File '${fileName}' not found`);
+                setMessage(`File '${fileName}' not found`);
                 return;
             }
             else {
@@ -50,7 +54,7 @@ const DrawCommand = () => {
                 const columnData = await columnResponse.json();
                 const missingColumns = columnData.missingColumns;
                 if (missingColumns.length > 0) {
-                    alert(`Columns [${missingColumns.join(', ')}] not found in file '${fileName}'`);
+                    setMessage(`Columns [${missingColumns.join(', ')}] not found in file '${fileName}'`);
                     return;
                 }
             }
@@ -66,12 +70,13 @@ const DrawCommand = () => {
             if (response.ok) {
                 const data = await response.json();
                 setChartData(data.chart_data);
-                console.log('Data Fetched Successfully');
+                SetSuccessMessage(' - Chart drawn successfully.')
+                setMessage(` - Drawing chart based on ${fileName} file`);
             } else {
-                console.error('Failed to fetch chart data');
+                setMessage('Failed to fetch chart data');
             }
         } catch (error) {
-            console.error('Error fetching chart data:', error);
+            setMessage('Error fetching chart data');
         }
     };
 
@@ -96,7 +101,8 @@ const DrawCommand = () => {
                         placeholder="Enter command - draw file-name.csv column-name-1 column-name-2 ... )" />
                 </div>
             </div>
-            
+            {message && <div style={{ marginLeft : '25px' }} >{message}</div>}
+            {successMessage && <div style={{ marginLeft : '25px' }}>{successMessage}</div>}
             {chartData.length > 0 && (
                 <div className='linechart-div'>
                     <LineChart

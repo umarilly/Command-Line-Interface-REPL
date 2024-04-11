@@ -37,7 +37,7 @@ const UploadCommand = () => {
 
             if (response.ok) {
                 setNameChangeMessage('The name of the file is changed according to naming convention');
-                setMessage('File uploaded successfully.');
+                setMessage(`${file.name} has been uploaded successfully.`);
                 setFile(null);
             } else {
                 setMessage('Failed to upload file. Please try again.');

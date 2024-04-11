@@ -42,6 +42,15 @@ def draw_chart():
     return jsonify({'chart_data': chart_data}), 200
 
 
+@app.route('/api/checkFile/<file_name>', methods=['GET'])
+def check_file(file_name):
+    file_path = os.path.join('draw-chart', file_name)
+    if os.path.exists(file_path):
+        return jsonify({'exists': True}), 200
+    else:
+        return jsonify({'exists': False}), 200
+
+
 @app.route('/api/delete', methods=['POST'])
 def delete_file():
     

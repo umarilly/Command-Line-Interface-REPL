@@ -83,7 +83,7 @@ const Terminal = () => {
                         <div key={index}>
                             <span>{'> '}</span>
                             <span>{command}</span>
-                            <div style={{ marginLeft: '12px' }} >{output}</div>
+                            <div style={{ marginLeft: '12px' , border: '1px soild white' }} >{output}</div>
                         </div>
                     ))}
 

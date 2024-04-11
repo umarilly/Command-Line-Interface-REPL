@@ -1,5 +1,4 @@
 
-// AboutCommand.jsx
 import React from 'react';
 
 const AboutCommand = () => {

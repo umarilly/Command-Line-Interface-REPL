@@ -6,6 +6,9 @@
     font-size: 15px;
 }
 
+/* For Home */
+/* No such styling is required fo Home component */
+
 /* For Terminal */
 
 .cli {
@@ -27,9 +30,9 @@
     background-size: 100% 100%;
 }
 
-
 .output {
     margin-bottom: 10px; 
+    border: 1px solid white;
 }
 
 .input-area {

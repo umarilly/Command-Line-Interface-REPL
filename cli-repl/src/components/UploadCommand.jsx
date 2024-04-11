@@ -4,15 +4,19 @@ const UploadCommand = () => {
 
     const [file, setFile] = useState(null);
     const [message, setMessage] = useState('');
+    const [nameChangeMessage, setNameChangeMessage] = useState('');
+
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile && selectedFile.name.endsWith('.csv')) {
-            setFile(selectedFile);
+            const fileName = selectedFile.name.toLowerCase().replace(/\s+/g, '-');
+            const newFile = new File([selectedFile], fileName, { type: selectedFile.type });
+            setFile(newFile);
             setMessage('');
         } else {
             setFile(null);
-            setMessage('Unsupported file format, please select a .csv file.'); 
+            setMessage('Unsupported file format, please select a .csv file.');
         }
     };
 
@@ -32,6 +36,7 @@ const UploadCommand = () => {
             });
 
             if (response.ok) {
+                setNameChangeMessage('The name of the file is changed according to naming convention');
                 setMessage('File uploaded successfully.');
                 setFile(null);
             } else {
@@ -47,6 +52,7 @@ const UploadCommand = () => {
             <h3>Upload Command</h3>
             <input type="file" accept=".csv" onChange={handleFileChange} /> <br />
             <button className='upload-btn' onClick={handleUpload}>Upload</button>
+            {nameChangeMessage && <div className='upload-message' >{nameChangeMessage}</div>}
             {message && <div className='upload-message' >{message}</div>}
         </div>
     );

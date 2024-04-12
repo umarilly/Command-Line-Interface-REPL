@@ -1,26 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import '../styles/terminal.css'
-import CryptoPairs from './CryptoPairs'
 
-const FetchPriceCommand = () => {
+const FetchPriceCommand = ({ sendInput }) => {
 
-    const [inputValue, setInputValue] = useState('');
     const [pair, setPair] = useState('');
     const [price, setPrice] = useState('');
     const [error, setError] = useState('');
 
-    const inputRef = useRef(null);
-
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
-
-    useEffect(() => {
-        if (inputRef.current) {
-            inputRef.current.focus();
-            inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
-        }
-    }, [pair]);
+    const inputValue = sendInput.join(' ');
 
     const fetchPrice = async () => {
 
@@ -30,8 +18,8 @@ const FetchPriceCommand = () => {
             setError('Invalid input format. Please use "fetch-price [pair]"');
             return;
         }
-        const fetchCommand = inputParts[0];
-        const pairValue = inputParts.slice(1);
+        
+        const pairValue = inputParts[1];
         setPair(pairValue);
 
         try {
@@ -45,35 +33,15 @@ const FetchPriceCommand = () => {
         }
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    useEffect(() => {
         fetchPrice();
-    };
+    }, []);
 
     return (
         <>
             <div>
-                <div><h3>Please choose the pair you want to enter - OR you can enter any </h3></div>
-                <div className='crypto-table'>
-                    <CryptoPairs />
-                </div>
-
                 <div>
-                    <form onSubmit={handleSubmit}>
-                        <div className='input-area' >
-                            <div className='input-area-sign'> {'> '}</div>
-                            <div className='input-area-box' >
-                                <input
-                                    type="text"
-                                    value={inputValue}
-                                    placeholder='Please enter fetch-price [pair]'
-                                    onChange={handleInputChange}
-                                    ref={inputRef}
-                                />
-                            </div>
-                        </div>
-                    </form>
-                    {error ? <div>{error}</div> : <div style={{ marginLeft : '12px' }} >{price && `The current price of ${pair} is ${price}.`}</div>}
+                    {error ? <div>{error}</div> : <div style={{ marginLeft: '10px' }} >{price && `The current price of ${pair} is ${price}.`}</div>}
                 </div>
             </div>
         </>

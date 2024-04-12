@@ -11,8 +11,9 @@ const Terminal = () => {
 
     const [inputValue, setInputValue] = useState('');
     const [commandHistory, setCommandHistory] = useState([]);
-    const inputRef = useRef(null);
     const [clearIntro, setClearIntro] = useState(false);
+
+    const inputRef = useRef(null);
 
     useEffect(() => {
         if (inputRef.current) {
@@ -27,7 +28,9 @@ const Terminal = () => {
 
     const handleCommandSubmit = (e) => {
         e.preventDefault();
-        const command = inputValue.trim().toLowerCase();
+
+        const sendInput = inputValue.trim().split(' ');
+        const command = sendInput[0];
 
         let newOutput = '';
         switch (command) {
@@ -38,7 +41,7 @@ const Terminal = () => {
                 newOutput = <AboutCommand />;
                 break;
             case 'fetch-price':
-                newOutput = <FetchPriceCommand />;
+                newOutput = <FetchPriceCommand sendInput = {sendInput} />;
                 break;
             case 'upload':
                 newOutput = <UploadCommand />;
@@ -60,7 +63,7 @@ const Terminal = () => {
                 newOutput = `Command not found: ${command}`;
         }
 
-        setCommandHistory((prevHistory) => [...prevHistory, { command, output: newOutput }]);
+        setCommandHistory((prevHistory) => [...prevHistory, { inputValue, output: newOutput }]);
         setInputValue('');
 
         if (command === 'clear' || command === 'Clear') {
@@ -79,10 +82,10 @@ const Terminal = () => {
                             <h1> Welcome to Command Line Interface - REPL </h1>
                         </div>
                     )}
-                    {commandHistory.map(({ command, output }, index) => (
+                    {commandHistory.map(({ inputValue, output }, index) => (
                         <div key={index}>
                             <span>{'> '}</span>
-                            <span>{command}</span>
+                            <span>{inputValue}</span>
                             <div style={{ marginLeft: '12px' , border: '1px soild white' }} >{output}</div>
                         </div>
                     ))}

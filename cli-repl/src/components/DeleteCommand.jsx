@@ -14,7 +14,7 @@ const DeleteCommand = () => {
             inputRef.current.focus();
             inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
         }
-    });
+    },[]);
 
     const handleInputChange = (e) => {
         setInputValue(e.target.value);
@@ -28,7 +28,6 @@ const DeleteCommand = () => {
             return;
         }
 
-        const deleteCommand = inputParts[0];
         const fileName = inputParts[1];
 
         try {
@@ -47,6 +46,7 @@ const DeleteCommand = () => {
                 if (deleteResponse.ok) {
                     const deleteData = await deleteResponse.json();
                     setMessage(deleteData.message);
+                    inputRef.current.blur();
                     setFileName('');
                 } else {
                     setMessage('Failed to delete file. Please try again.');

@@ -70,6 +70,7 @@ const DrawCommand = () => {
             if (response.ok) {
                 const data = await response.json();
                 setChartData(data.chart_data);
+                inputRef.current.blur();
                 SetSuccessMessage(' - Chart drawn successfully.')
                 setMessage(` - Drawing chart based on ${fileName} file`);
             } else {
@@ -83,6 +84,7 @@ const DrawCommand = () => {
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             handleDraw();
+            
         }
     };
 
